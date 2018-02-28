@@ -6,7 +6,7 @@ Paste like this:
 
 Not like this:
 
-<pastebin.com>
+`pastebin.com`
 
 ## Source
 
