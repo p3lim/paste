@@ -4,7 +4,11 @@ Paste like this:
 
 `echo 'hello world' | curl -F c=@- {{url}}`
 
-Not like this:
+Or like:
+
+`curl -F c=@filename {{url}}`
+
+Just not like this:
 
 `pastebin.com`
 
