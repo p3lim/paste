@@ -1,6 +1,11 @@
 from os import path, environ
-from dataset import connect
+from uuid import uuid4
+
 import bottle
+from dataset import connect
+from pygments import highlight
+from pygments.lexers import guess_lexer
+from pygments.formatters import HtmlFormatter
 
 # constants
 HOST = environ.get('LISTEN_ADDRESS', '0.0.0.0')
@@ -27,10 +32,6 @@ def index():
 @bottle.get('/<ident>')
 def show(ident):
 	try:
-		from pygments import highlight
-		from pygments.lexers import guess_lexer
-		from pygments.formatters import HtmlFormatter
-
 		content = get_content(ident)
 		lexer = guess_lexer(content)
 
@@ -67,7 +68,6 @@ def post():
 			content = bottle.request.forms.get('c')
 
 		if content:
-			from uuid import uuid4
 			ident = uuid4().hex[:LEN]
 
 			db = connect('sqlite:////config/db/paste.db')['pastes']
