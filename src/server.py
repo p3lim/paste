@@ -13,48 +13,43 @@ VIEWS = path.join(PATH, 'views')
 # set path to views
 bottle.TEMPLATE_PATH.append(VIEWS)
 
-def get(content, raw=False):
-	'''
-	Formats given content for HTML
-	'''
-	if raw:
-		from html import escape
-		return '<pre>%s</pre>' % escape(content)
-
-	from pygments import highlight
-	from pygments.lexers import guess_lexer
-	from pygments.formatters import HtmlFormatter
-
-	lexer = guess_lexer(content)
-
-	return highlight(content, lexer, HtmlFormatter(
-		linenos=True,
-		linespans='L',
-		lineanchors='L',
-		anchorlinenos=True,
-	))
+def get_content(ident):
+	db = connect('sqlite:////config/db/paste.db')['pastes']
+	data = db.find_one(ident=ident)
+	return data['content']
 
 @bottle.get('/')
 def index():
 	with open(path.join(PATH, 'README.md')) as file:
 		content = file.read().replace('{{url}}', bottle.request.url)
-
-		return bottle.template('view', dict(
-			content = get(content, True),
-			path = None
-		))
+		return bottle.template('view', dict(content=content))
 
 @bottle.get('/<ident>')
-@bottle.get('/raw/<ident>')
 def show(ident):
 	try:
-		db = connect('sqlite:////config/db/paste.db')['pastes']
-		data = db.find_one(ident=ident)
+		from pygments import highlight
+		from pygments.lexers import guess_lexer
+		from pygments.formatters import HtmlFormatter
 
-		return bottle.template('view', dict(
-			content = get(data['content'], bottle.request.path.startswith('/raw/')),
-			path = bottle.request.path
+		content = get_content(ident)
+		lexer = guess_lexer(content)
+
+		content = highlight(content, lexer, HtmlFormatter(
+			linenos=True,
+			linespans='L',
+			lineanchors='L',
+			anchorlinenos=True,
 		))
+
+		return bottle.template('view', dict(content=content))
+	except:
+		bottle.abort(404)
+
+@bottle.get('/raw/<ident>')
+def show_raw(ident):
+	try:
+		bottle.response.content_type = 'text/plain; charset=UTF-8'
+		return get_content(ident)
 	except:
 		bottle.abort(404)
 

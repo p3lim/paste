@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		{{!content}}
-		% if path and not path.startswith('/raw'):
+
 		<button onclick="window.location.pathname = '/raw' + window.location.pathname;"></button>
 		<script>
 			function highlight(){
@@ -20,6 +20,5 @@
 			window.addEventListener('hashchange', highlight, false);
 			highlight();
 		</script>
-		% end
 	</body>
 </html>
