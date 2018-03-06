@@ -25,9 +25,7 @@ def get_content(ident):
 
 @bottle.get('/')
 def index():
-	with open(path.join(PATH, 'README.md')) as file:
-		content = file.read().replace('{{url}}', bottle.request.url)
-		return bottle.template('view', dict(content=content))
+	bottle.redirect('https://github.com/p3lim/paste')
 
 @bottle.get('/<ident>')
 def show(ident):
