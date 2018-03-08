@@ -6,7 +6,7 @@ Features:
 - File/form upload
 - Syntax highlighted and raw views
 - Link to and highlight specific lines
-- Intentionally designed for Docker
+- Intentionally designed [for Docker](https://github.com/p3lim/docker-paste)
 
 Planned:
 - Multithread
@@ -17,7 +17,7 @@ Planned:
 ## How to run
 
 - Clone this repo
-- Build with docker
+- Build with docker (or use the [official one](https://hub.docker.com/r/p3lim/paste/))
 - Run with docker
 - Paste away
 
