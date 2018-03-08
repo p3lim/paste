@@ -16,7 +16,6 @@ Planned:
 
 ## How to run
 
-- Clone this repo
 - Build with docker (or use the [official one](https://hub.docker.com/r/p3lim/paste/))
 - Run with docker
 - Paste away
