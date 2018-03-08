@@ -11,6 +11,8 @@ from pygments.formatters import HtmlFormatter
 HOST = environ.get('LISTEN_ADDRESS', '0.0.0.0')
 PORT = environ.get('LISTEN_PORT', 8080)
 LEN = environ.get('PATH_LENGTH', 4)
+CONFIG_PATH = environ.get('CONFIG_PATH', '/config')
+
 PATH = path.dirname(path.realpath(__file__))
 STATIC = path.join(PATH, 'static')
 VIEWS = path.join(PATH, 'views')
@@ -19,7 +21,7 @@ VIEWS = path.join(PATH, 'views')
 bottle.TEMPLATE_PATH.append(VIEWS)
 
 def get_content(ident):
-	db = connect('sqlite:////config/db/paste.db')['pastes']
+	db = connect('sqlite:///%s/db/paste.db' % CONFIG_PATH)['pastes']
 	data = db.find_one(ident=ident)
 	return data['content']
 
@@ -68,7 +70,7 @@ def post():
 		if content:
 			ident = uuid4().hex[:LEN]
 
-			db = connect('sqlite:////config/db/paste.db')['pastes']
+			db = connect('sqlite:///%s/db/paste.db' % CONFIG_PATH)['pastes']
 			while db.find_one(ident=ident):
 				ident = uuid4().hex[:LEN]
 
