@@ -65,7 +65,7 @@ def post():
 
 		form = bottle.request.forms.get('c')
 		if form:
-			content = bottle.request.forms.get('c')
+			content = bottle.request.forms.getunicode('c')
 
 		if content:
 			ident = uuid4().hex[:LEN]
