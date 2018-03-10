@@ -5,13 +5,13 @@ A (very) basic pastebin application written in Python.
 Features:
 - File/form upload
 - Syntax highlighted and raw views
+- Support for images
 - Link to and highlight specific lines
 - Intentionally designed [for Docker](https://github.com/p3lim/docker-paste)
 
 Planned:
 - Multithread
 - Render markdown
-- Render images
 - URL shortening
 
 ## How to run

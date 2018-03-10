@@ -23,7 +23,7 @@ bottle.TEMPLATE_PATH.append(VIEWS)
 def get_content(ident):
 	db = connect('sqlite:///%s/db/paste.db' % CONFIG_PATH)['pastes']
 	data = db.find_one(ident=ident)
-	return data['content']
+	return data['content'], data['type']
 
 @bottle.get('/')
 def index():
@@ -32,17 +32,21 @@ def index():
 @bottle.get('/<ident>')
 def show(ident):
 	try:
-		content = get_content(ident)
-		lexer = guess_lexer(content)
+		content, contentType = get_content(ident)
+		if contentType.startswith('image'):
+			bottle.response.content_type = contentType
+			return content
+		else:
+			lexer = guess_lexer(content)
 
-		content = highlight(content, lexer, HtmlFormatter(
-			linenos=True,
-			linespans='L',
-			lineanchors='L',
-			anchorlinenos=True,
-		))
+			content = highlight(content, lexer, HtmlFormatter(
+				linenos=True,
+				linespans='L',
+				lineanchors='L',
+				anchorlinenos=True,
+			))
 
-		return bottle.template('view', dict(content=content))
+			return bottle.template('view', dict(content=content))
 	except:
 		bottle.abort(404)
 
@@ -58,10 +62,15 @@ def show_raw(ident):
 def post():
 	try:
 		content = None
+		contentType = 'text/plain'
 
 		file = bottle.request.files.get('c')
 		if file:
-			content = file.file.read().decode('utf-8')
+			if file.content_type.startswith('image'):
+				contentType = file.content_type
+				content = file.file.read()
+			else:
+				content = file.file.read().decode('utf-8')
 
 		form = bottle.request.forms.get('c')
 		if form:
@@ -76,12 +85,13 @@ def post():
 
 			db.insert(dict(
 				ident = ident,
-				content = content
+				content = content,
+				type = contentType
 			))
 
 			return bottle.request.url + ident
-		else:
-			bottle.abort(400)
+
+		bottle.abort(400)
 	except:
 		bottle.abort(500)
 
