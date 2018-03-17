@@ -54,7 +54,7 @@ def show(ident):
 def show_raw(ident):
 	try:
 		bottle.response.content_type = 'text/plain; charset=UTF-8'
-		return get_content(ident)
+		return get_content(ident)[0]
 	except:
 		bottle.abort(404)
 
