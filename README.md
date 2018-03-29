@@ -23,6 +23,7 @@ Planned:
 ## Plugins
 
 - [Sublime Text 3](https://github.com/p3lim/sublime-paste)
+- [ScreenCloud](https://github.com/p3lim/screencloud-paste)
 - Bash:
   ```
   paste(){
