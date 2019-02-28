@@ -7,6 +7,7 @@ from dataset import connect
 from pygments import highlight
 from pygments.lexers import guess_lexer
 from pygments.formatters import HtmlFormatter
+from waitress import serve
 
 app = flask.Flask(__name__)
 
@@ -105,3 +106,6 @@ def error404(e):
 @app.errorhandler(500)
 def error500(e):
 	return 'Something went wrong!\n'
+
+if __name__ == '__main__':
+	serve(app, port=5000)

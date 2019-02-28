@@ -1,3 +1,4 @@
 flask>=1.0<=2.0
 dataset>=1.0<=2.0
 pygments>=2.0<=3.0
+waitress>=1.0<=2.0
